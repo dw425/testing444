@@ -27,17 +27,18 @@
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    padding: 2.5rem 1.5rem;
+    padding: 2.5rem;
     background-image:
-      radial-gradient(ellipse at 20% 50%, rgba(59, 130, 246, 0.04) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 20%, rgba(16, 185, 129, 0.03) 0%, transparent 50%);
+      radial-gradient(ellipse at 15% 50%, rgba(59, 130, 246, 0.04) 0%, transparent 60%),
+      radial-gradient(ellipse at 85% 20%, rgba(16, 185, 129, 0.03) 0%, transparent 50%);
   }
 
-  .container { width: 100%; max-width: 680px; margin: 0 auto; }
+  .page-header {
+    max-width: 1280px;
+    margin: 0 auto 2rem;
+  }
 
-  .header { margin-bottom: 2.5rem; }
-
-  .header .tag {
+  .page-header .tag {
     font-family: 'DM Mono', monospace;
     font-size: 0.7rem;
     letter-spacing: 0.15em;
@@ -47,29 +48,44 @@
     padding: 0.35rem 0.75rem;
     border-radius: 4px;
     display: inline-block;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     border: 1px solid rgba(59, 130, 246, 0.2);
   }
 
-  .header h1 {
-    font-size: 1.75rem;
+  .page-header h1 {
+    font-size: 1.6rem;
     font-weight: 700;
     letter-spacing: -0.02em;
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.3rem;
   }
 
-  .header p {
+  .page-header p {
     color: var(--text-dim);
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     line-height: 1.5;
+  }
+
+  /* --- Two-column layout --- */
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    max-width: 1280px;
+    margin: 0 auto;
+    align-items: start;
+  }
+
+  .left-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
 
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 2rem;
-    margin-bottom: 1.5rem;
+    padding: 1.75rem;
   }
 
   .card-title {
@@ -78,37 +94,37 @@
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--text-dim);
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.75rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.65rem;
     border-bottom: 1px solid var(--border);
   }
 
-  /* --- Vertical input rows --- */
+  /* --- Inputs --- */
   .input-stack {
     display: flex;
     flex-direction: column;
-    gap: 1.75rem;
+    gap: 1.5rem;
   }
 
   .input-group label {
     display: block;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 600;
     color: var(--text-dim);
-    margin-bottom: 0.65rem;
+    margin-bottom: 0.55rem;
   }
 
   .slider-row {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.85rem;
   }
 
   input[type="range"] {
     -webkit-appearance: none;
     appearance: none;
     flex: 1;
-    height: 8px;
+    height: 7px;
     border-radius: 4px;
     background: var(--surface2);
     outline: none;
@@ -117,38 +133,38 @@
 
   input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     background: var(--accent);
     cursor: pointer;
-    box-shadow: 0 0 12px rgba(59, 130, 246, 0.45);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
     transition: transform 0.15s ease;
   }
 
-  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.12); }
 
   input[type="range"]::-moz-range-thumb {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     background: var(--accent);
-    cursor: pointer;
     border: none;
-    box-shadow: 0 0 12px rgba(59, 130, 246, 0.45);
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
   }
 
   .num-input {
     font-family: 'DM Mono', monospace;
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     font-weight: 500;
     color: var(--text);
-    width: 90px;
+    width: 82px;
     text-align: center;
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 0.45rem 0.6rem;
+    padding: 0.4rem 0.5rem;
     outline: none;
     transition: border-color 0.2s;
     flex-shrink: 0;
@@ -166,34 +182,31 @@
   .range-labels {
     display: flex;
     justify-content: space-between;
-    margin-top: 0.3rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--text-dim);
-    opacity: 0.5;
-  }
-
-  /* --- Complexity Multiplier --- */
-  .complexity-section {
     margin-top: 0.25rem;
+    padding-right: calc(82px + 0.85rem);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    opacity: 0.45;
   }
 
+  /* --- Complexity --- */
   .complexity-options {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 0.75rem;
+    gap: 0.65rem;
   }
 
   .complexity-btn {
     position: relative;
     font-family: 'Instrument Sans', sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 600;
     color: var(--text-dim);
     background: var(--surface2);
     border: 2px solid var(--border);
     border-radius: 10px;
-    padding: 1rem 0.75rem;
+    padding: 0.85rem 0.5rem;
     cursor: pointer;
     text-align: center;
     transition: all 0.2s ease;
@@ -214,9 +227,9 @@
   .complexity-btn .multiplier {
     display: block;
     font-family: 'DM Mono', monospace;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 500;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.2rem;
     color: var(--accent);
     opacity: 0.5;
     transition: opacity 0.2s;
@@ -224,17 +237,12 @@
 
   .complexity-btn.active .multiplier { opacity: 1; }
 
-  .complexity-btn .clabel {
-    display: block;
-    font-size: 0.78rem;
-  }
+  .complexity-btn .clabel { display: block; font-size: 0.75rem; }
 
   .active-dot {
     position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 8px;
-    height: 8px;
+    top: 7px; right: 7px;
+    width: 7px; height: 7px;
     border-radius: 50%;
     background: var(--accent);
     display: none;
@@ -243,14 +251,16 @@
 
   .complexity-btn.active .active-dot { display: block; }
 
-  /* --- Output Card --- */
+  /* --- Output Card (right side) --- */
   .output-card {
     background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 2rem;
+    padding: 1.75rem;
     position: relative;
     overflow: hidden;
+    position: sticky;
+    top: 2rem;
   }
 
   .output-card::before {
@@ -263,8 +273,8 @@
 
   .hero-output {
     text-align: center;
-    margin-bottom: 2rem;
-    padding: 1.75rem;
+    margin-bottom: 1.75rem;
+    padding: 1.5rem 1rem;
     background: rgba(59, 130, 246, 0.06);
     border: 1px solid rgba(59, 130, 246, 0.15);
     border-radius: 10px;
@@ -272,81 +282,81 @@
 
   .hero-output .value {
     font-family: 'DM Mono', monospace;
-    font-size: 3.75rem;
+    font-size: 3.5rem;
     font-weight: 500;
     color: var(--accent);
     line-height: 1;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.45rem;
   }
 
   .hero-output .label {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     color: var(--text-dim);
     text-transform: uppercase;
     letter-spacing: 0.1em;
   }
 
-  .output-grid {
+  .output-trio {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 1.25rem;
-    margin-bottom: 1.75rem;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
   }
 
   .output-item { text-align: center; }
 
   .output-item .value {
     font-family: 'DM Mono', monospace;
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     font-weight: 500;
     line-height: 1;
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.35rem;
   }
 
   .output-item .label {
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     color: var(--text-dim);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    line-height: 1.3;
+    letter-spacing: 0.05em;
+    line-height: 1.35;
   }
 
   .divider {
     height: 1px;
     background: var(--border);
-    margin-bottom: 1.75rem;
+    margin-bottom: 1.5rem;
   }
 
   .summary-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.75rem 1rem;
+    padding: 0.6rem 0.85rem;
     background: var(--surface);
     border-radius: 8px;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.6rem;
   }
 
   .summary-row:last-child { margin-bottom: 0; }
 
   .summary-label {
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     color: var(--text-dim);
   }
 
   .summary-value {
     font-family: 'DM Mono', monospace;
-    font-size: 0.88rem;
+    font-size: 0.82rem;
     font-weight: 500;
   }
 
   .status-badge {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.35rem;
     font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    padding: 0.3rem 0.7rem;
+    font-size: 0.72rem;
+    padding: 0.25rem 0.6rem;
     border-radius: 4px;
     font-weight: 500;
   }
@@ -382,92 +392,99 @@
   }
 
   .formula-bar {
-    margin-top: 1.5rem;
+    margin-top: 1.25rem;
     font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     color: var(--text-dim);
     text-align: center;
-    padding: 0.75rem;
+    padding: 0.65rem;
     background: var(--surface);
     border-radius: 6px;
     border: 1px dashed var(--border);
-    line-height: 1.8;
+    line-height: 1.7;
   }
 
-  @media (max-width: 540px) {
-    .output-grid { grid-template-columns: 1fr; gap: 1rem; }
-    body { padding: 1.25rem 1rem; }
-    .hero-output .value { font-size: 2.5rem; }
+  /* Responsive: stack on narrow screens */
+  @media (max-width: 860px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+    .output-card { position: static; }
+    body { padding: 1.25rem; }
+  }
+
+  @media (max-width: 480px) {
+    .output-trio { grid-template-columns: 1fr; gap: 0.75rem; }
     .complexity-options { grid-template-columns: 1fr; }
+    .hero-output .value { font-size: 2.5rem; }
   }
 </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="header">
-    <div class="tag">Planning Tool</div>
-    <h1>Project Velocity Calculator</h1>
-    <p>Adjust the levers to estimate total effort and how many resources are needed to deliver within the timeline.</p>
-  </div>
+<div class="page-header">
+  <div class="tag">Planning Tool</div>
+  <h1>Project Velocity Calculator</h1>
+  <p>Adjust the levers to estimate total effort and how many resources are needed to deliver within the timeline.</p>
+</div>
 
-  <div class="card">
-    <div class="card-title">Input Parameters</div>
-    <div class="input-stack">
+<div class="layout">
 
-      <div class="input-group">
-        <label>Number of Sessions</label>
-        <div class="slider-row">
-          <input type="range" id="sessions" min="1" max="30000" value="20000" step="1">
-          <input type="number" class="num-input" id="sessionsNum" value="20000" min="1" max="30000">
+  <!-- LEFT: Inputs + Complexity -->
+  <div class="left-col">
+    <div class="card">
+      <div class="card-title">Input Parameters</div>
+      <div class="input-stack">
+        <div class="input-group">
+          <label>Number of Sessions</label>
+          <div class="slider-row">
+            <input type="range" id="sessions" min="1" max="30000" value="20000" step="1">
+            <input type="number" class="num-input" id="sessionsNum" value="20000" min="1" max="30000">
+          </div>
+          <div class="range-labels"><span>1</span><span>30,000</span></div>
         </div>
-        <div class="range-labels"><span>1</span><span>30,000</span></div>
-      </div>
-
-      <div class="input-group">
-        <label>Days per Session</label>
-        <div class="slider-row">
-          <input type="range" id="daysPerSession" min="1" max="30" value="2">
-          <input type="number" class="num-input" id="daysPerSessionNum" value="2" min="1" max="30">
+        <div class="input-group">
+          <label>Days per Session</label>
+          <div class="slider-row">
+            <input type="range" id="daysPerSession" min="1" max="30" value="2">
+            <input type="number" class="num-input" id="daysPerSessionNum" value="2" min="1" max="30">
+          </div>
+          <div class="range-labels"><span>1</span><span>30</span></div>
         </div>
-        <div class="range-labels"><span>1</span><span>30</span></div>
-      </div>
-
-      <div class="input-group">
-        <label>Duration (Months)</label>
-        <div class="slider-row">
-          <input type="range" id="months" min="6" max="24" value="12">
-          <input type="number" class="num-input" id="monthsNum" value="12" min="6" max="24">
+        <div class="input-group">
+          <label>Duration (Months)</label>
+          <div class="slider-row">
+            <input type="range" id="months" min="6" max="24" value="12">
+            <input type="number" class="num-input" id="monthsNum" value="12" min="6" max="24">
+          </div>
+          <div class="range-labels"><span>6</span><span>24</span></div>
         </div>
-        <div class="range-labels"><span>6</span><span>24</span></div>
       </div>
+    </div>
 
+    <div class="card">
+      <div class="card-title">Complexity Multiplier</div>
+      <div class="complexity-options">
+        <button class="complexity-btn active" data-mult="1.25" onclick="setComplexity(this)">
+          <span class="active-dot"></span>
+          <span class="multiplier">1.25×</span>
+          <span class="clabel">Simple</span>
+        </button>
+        <button class="complexity-btn" data-mult="2" onclick="setComplexity(this)">
+          <span class="active-dot"></span>
+          <span class="multiplier">2×</span>
+          <span class="clabel">Medium</span>
+        </button>
+        <button class="complexity-btn" data-mult="3" onclick="setComplexity(this)">
+          <span class="active-dot"></span>
+          <span class="multiplier">3×</span>
+          <span class="clabel">Complex</span>
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- Complexity Multiplier -->
-  <div class="card">
-    <div class="card-title">Complexity Multiplier</div>
-    <div class="complexity-options">
-      <button class="complexity-btn active" data-mult="1.25" onclick="setComplexity(this)">
-        <span class="active-dot"></span>
-        <span class="multiplier">1.25×</span>
-        <span class="clabel">Simple</span>
-      </button>
-      <button class="complexity-btn" data-mult="2" onclick="setComplexity(this)">
-        <span class="active-dot"></span>
-        <span class="multiplier">2×</span>
-        <span class="clabel">Medium</span>
-      </button>
-      <button class="complexity-btn" data-mult="3" onclick="setComplexity(this)">
-        <span class="active-dot"></span>
-        <span class="multiplier">3×</span>
-        <span class="clabel">Complex</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- Output -->
+  <!-- RIGHT: Output -->
   <div class="output-card">
     <div class="card-title">Velocity Output</div>
 
@@ -476,7 +493,7 @@
       <div class="label">Resources Needed</div>
     </div>
 
-    <div class="output-grid">
+    <div class="output-trio">
       <div class="output-item">
         <div class="value" id="baseEffort" style="color: var(--text-dim);">—</div>
         <div class="label">Base Effort<br>(Days)</div>
@@ -523,11 +540,12 @@
       resources = ⌈ (sessions × days/session × complexity) ÷ (months × 21.67) ⌉
     </div>
   </div>
+
 </div>
 
 <script>
-  const WD_PER_MONTH = 21.67;
-  let complexityMultiplier = 1.25;
+  const WD = 21.67;
+  let mult = 1.25;
 
   const pairs = [
     { slider: 'sessions', num: 'sessionsNum' },
@@ -535,38 +553,35 @@
     { slider: 'months', num: 'monthsNum' },
   ];
 
-  function fmt(n) { return n.toLocaleString(); }
-  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  const fmt = n => n.toLocaleString();
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
   function setComplexity(btn) {
     document.querySelectorAll('.complexity-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    complexityMultiplier = parseFloat(btn.dataset.mult);
+    mult = parseFloat(btn.dataset.mult);
     calculate();
   }
 
   function calculate() {
-    const sessions = parseInt(document.getElementById('sessions').value);
-    const dps = parseInt(document.getElementById('daysPerSession').value);
-    const months = parseInt(document.getElementById('months').value);
+    const s = parseInt(document.getElementById('sessions').value);
+    const d = parseInt(document.getElementById('daysPerSession').value);
+    const m = parseInt(document.getElementById('months').value);
 
-    const base = sessions * dps;
-    const adjusted = Math.ceil(base * complexityMultiplier);
-    const availPP = Math.round(months * WD_PER_MONTH);
-    const resources = Math.ceil(adjusted / availPP);
-    const util = Math.round((adjusted / (resources * availPP)) * 100);
+    const base = s * d;
+    const adj = Math.ceil(base * mult);
+    const avail = Math.round(m * WD);
+    const res = Math.ceil(adj / avail);
+    const util = Math.round((adj / (res * avail)) * 100);
 
-    document.getElementById('resourcesNeeded').textContent = fmt(resources);
+    document.getElementById('resourcesNeeded').textContent = fmt(res);
     document.getElementById('baseEffort').textContent = fmt(base);
-    document.getElementById('totalEffort').textContent = fmt(adjusted);
-    document.getElementById('availableDays').textContent = fmt(availPP);
+    document.getElementById('totalEffort').textContent = fmt(adj);
+    document.getElementById('availableDays').textContent = fmt(avail);
 
-    document.getElementById('baseSummary').textContent =
-      `${fmt(sessions)} × ${dps} d = ${fmt(base)} days`;
-    document.getElementById('adjSummary').textContent =
-      `${fmt(base)} × ${complexityMultiplier}× = ${fmt(adjusted)} days`;
-    document.getElementById('capacitySummary').textContent =
-      `${months} mo × 21.67 = ${fmt(availPP)} days`;
+    document.getElementById('baseSummary').textContent = `${fmt(s)} × ${d} d = ${fmt(base)} days`;
+    document.getElementById('adjSummary').textContent = `${fmt(base)} × ${mult}× = ${fmt(adj)} days`;
+    document.getElementById('capacitySummary').textContent = `${m} mo × 21.67 = ${fmt(avail)} days`;
     document.getElementById('utilSummary').textContent = util + '%';
 
     const badge = document.getElementById('statusBadge');
@@ -581,35 +596,24 @@
       badge.innerHTML = '<span class="status-dot"></span>At Capacity';
     }
 
-    const utilEl = document.getElementById('utilSummary');
-    utilEl.style.color = util <= 75 ? 'var(--green)' : util <= 90 ? 'var(--amber)' : 'var(--red)';
+    const u = document.getElementById('utilSummary');
+    u.style.color = util <= 75 ? 'var(--green)' : util <= 90 ? 'var(--amber)' : 'var(--red)';
 
     document.getElementById('formulaBar').textContent =
-      `resources = ⌈ (${fmt(sessions)} × ${dps} × ${complexityMultiplier}) ÷ ${fmt(availPP)} ⌉ = ${fmt(resources)} people`;
+      `resources = ⌈ (${fmt(s)} × ${d} × ${mult}) ÷ ${fmt(avail)} ⌉ = ${fmt(res)} people`;
   }
 
-  // Sync sliders ↔ number inputs
   pairs.forEach(({ slider, num }) => {
     const s = document.getElementById(slider);
     const n = document.getElementById(num);
-
     s.addEventListener('input', () => { n.value = s.value; calculate(); });
-
     n.addEventListener('input', () => {
-      let v = parseInt(n.value);
-      if (isNaN(v)) return;
-      v = clamp(v, parseInt(s.min), parseInt(s.max));
-      s.value = v;
-      calculate();
+      let v = parseInt(n.value); if (isNaN(v)) return;
+      v = clamp(v, +s.min, +s.max); s.value = v; calculate();
     });
-
     n.addEventListener('blur', () => {
-      let v = parseInt(n.value);
-      if (isNaN(v)) v = parseInt(s.min);
-      v = clamp(v, parseInt(s.min), parseInt(s.max));
-      n.value = v;
-      s.value = v;
-      calculate();
+      let v = parseInt(n.value); if (isNaN(v)) v = +s.min;
+      v = clamp(v, +s.min, +s.max); n.value = v; s.value = v; calculate();
     });
   });
 

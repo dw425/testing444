@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Velocity Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0f14;
+    --surface: #151920;
+    --surface2: #1c2029;
+    --border: #2a2f3a;
+    --text: #e4e7ed;
+    --text-dim: #6b7280;
+    --accent: #3b82f6;
+    --accent-glow: rgba(59, 130, 246, 0.15);
+    --green: #10b981;
+    --amber: #f59e0b;
+    --red: #ef4444;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Instrument Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(59, 130, 246, 0.04) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(16, 185, 129, 0.03) 0%, transparent 50%);
+  }
+
+  .container { width: 100%; max-width: 720px; }
+
+  .header { margin-bottom: 2.5rem; }
+
+  .header .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-glow);
+    padding: 0.35rem 0.75rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+  }
+
+  .header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.4rem;
+  }
+
+  .header p {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .card-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .input-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .input-group label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-dim);
+  }
+
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .input-group input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--surface2);
+    outline: none;
+    cursor: pointer;
+  }
+
+  .input-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+    transition: transform 0.15s ease;
+  }
+
+  .input-group input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+  }
+
+  .num-input {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text);
+    min-width: 55px;
+    width: 72px;
+    text-align: right;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.3rem 0.5rem;
+    outline: none;
+    transition: border-color 0.2s;
+    flex-shrink: 0;
+  }
+
+  .num-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+  }
+
+  /* Hide number input spinners */
+  .num-input::-webkit-outer-spin-button,
+  .num-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .num-input { -moz-appearance: textfield; }
+
+  /* Output Card */
+  .output-card {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .output-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--green));
+  }
+
+  .hero-output {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(59, 130, 246, 0.06);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    border-radius: 10px;
+  }
+
+  .hero-output .value {
+    font-family: 'DM Mono', monospace;
+    font-size: 3.5rem;
+    font-weight: 500;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-output .label {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .output-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .output-item { text-align: center; }
+
+  .output-item .value {
+    font-family: 'DM Mono', monospace;
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .output-item .label {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 1.75rem;
+  }
+
+  .summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: var(--surface);
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+  }
+
+  .summary-row:last-child { margin-bottom: 0; }
+
+  .summary-label {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+  }
+
+  .summary-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .status-badge.green {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--green);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+  }
+
+  .status-badge.amber {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--amber);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+  }
+
+  .status-badge.red {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--red);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+  }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: pulse 2s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .formula-bar {
+    margin-top: 1.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    text-align: center;
+    padding: 0.75rem;
+    background: var(--surface);
+    border-radius: 6px;
+    border: 1px dashed var(--border);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 600px) {
+    .input-grid { grid-template-columns: 1fr; }
+    .output-grid { grid-template-columns: 1fr; gap: 1rem; }
+    body { padding: 1rem; }
+    .hero-output .value { font-size: 2.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="tag">Planning Tool</div>
+    <h1>Project Velocity Calculator</h1>
+    <p>Adjust the levers to estimate total effort and how many resources are needed to deliver within the timeline.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Input Parameters</div>
+    <div class="input-grid">
+      <div class="input-group">
+        <label>Number of Sessions</label>
+        <div class="slider-row">
+          <input type="range" id="sessions" min="1" max="30000" value="20000" step="1">
+          <input type="number" class="num-input" id="sessionsNum" value="20000" min="1" max="30000">
+        </div>
+      </div>
+      <div class="input-group">
+        <label>Days per Session</label>
+        <div class="slider-row">
+          <input type="range" id="daysPerSession" min="1" max="30" value="2">
+          <input type="number" class="num-input" id="daysPerSessionNum" value="2" min="1" max="30">
+        </div>
+      </div>
+      <div class="input-group">
+        <label>Duration (Months)</label>
+        <div class="slider-row">
+          <input type="range" id="months" min="6" max="24" value="12">
+          <input type="number" class="num-input" id="monthsNum" value="12" min="6" max="24">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="output-card">
+    <div class="card-title">Velocity Output</div>
+
+    <div class="hero-output">
+      <div class="value" id="resourcesNeeded">—</div>
+      <div class="label">Resources Needed</div>
+    </div>
+
+    <div class="output-grid">
+      <div class="output-item">
+        <div class="value" id="totalEffort" style="color: var(--accent);">—</div>
+        <div class="label">Total Effort (Working Days)</div>
+      </div>
+      <div class="output-item">
+        <div class="value" id="availableDays" style="color: var(--green);">—</div>
+        <div class="label">Working Days / Person</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="summary-row">
+      <span class="summary-label">Total Effort</span>
+      <span class="summary-value" id="effortSummary">—</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-label">Available Days per Person</span>
+      <span class="summary-value" id="capacitySummary">—</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-label">Utilization per Resource</span>
+      <span class="summary-value" id="utilSummary">—</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-label">Team Feasibility</span>
+      <span class="summary-value">
+        <span class="status-badge green" id="statusBadge">
+          <span class="status-dot"></span>
+          Comfortable
+        </span>
+      </span>
+    </div>
+
+    <div class="formula-bar">
+      resources = ⌈ total effort ÷ available days per person ⌉<br>
+      available days/person = months × 21.67 working days/month (~260 days/year)
+    </div>
+  </div>
+</div>
+
+<script>
+  const WORKING_DAYS_PER_MONTH = 21.67;
+
+  const pairs = [
+    { slider: 'sessions', num: 'sessionsNum' },
+    { slider: 'daysPerSession', num: 'daysPerSessionNum' },
+    { slider: 'months', num: 'monthsNum' },
+  ];
+
+  function fmt(n) { return n.toLocaleString(); }
+
+  function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
+
+  function calculate() {
+    const sessions = parseInt(document.getElementById('sessions').value);
+    const daysPerSession = parseInt(document.getElementById('daysPerSession').value);
+    const months = parseInt(document.getElementById('months').value);
+
+    const totalEffort = sessions * daysPerSession;
+    const availPerPerson = Math.round(months * WORKING_DAYS_PER_MONTH);
+    const resources = Math.ceil(totalEffort / availPerPerson);
+    const util = Math.round((totalEffort / (resources * availPerPerson)) * 100);
+
+    document.getElementById('resourcesNeeded').textContent = fmt(resources);
+    document.getElementById('totalEffort').textContent = fmt(totalEffort);
+    document.getElementById('availableDays').textContent = fmt(availPerPerson);
+
+    document.getElementById('effortSummary').textContent =
+      `${fmt(sessions)} × ${daysPerSession} d = ${fmt(totalEffort)} days`;
+    document.getElementById('capacitySummary').textContent =
+      `${months} mo × 21.67 = ${fmt(availPerPerson)} days`;
+    document.getElementById('utilSummary').textContent = util + '%';
+
+    // Status
+    const badge = document.getElementById('statusBadge');
+    if (util <= 75) {
+      badge.className = 'status-badge green';
+      badge.innerHTML = '<span class="status-dot"></span>Comfortable';
+    } else if (util <= 90) {
+      badge.className = 'status-badge amber';
+      badge.innerHTML = '<span class="status-dot"></span>Tight';
+    } else {
+      badge.className = 'status-badge red';
+      badge.innerHTML = '<span class="status-dot"></span>At Capacity';
+    }
+
+    const utilEl = document.getElementById('utilSummary');
+    if (util <= 75) utilEl.style.color = 'var(--green)';
+    else if (util <= 90) utilEl.style.color = 'var(--amber)';
+    else utilEl.style.color = 'var(--red)';
+  }
+
+  // Wire up slider ↔ number input sync
+  pairs.forEach(({ slider, num }) => {
+    const s = document.getElementById(slider);
+    const n = document.getElementById(num);
+
+    s.addEventListener('input', () => {
+      n.value = s.value;
+      calculate();
+    });
+
+    n.addEventListener('input', () => {
+      let val = parseInt(n.value);
+      if (isNaN(val)) return;
+      val = clamp(val, parseInt(s.min), parseInt(s.max));
+      s.value = val;
+      calculate();
+    });
+
+    n.addEventListener('blur', () => {
+      let val = parseInt(n.value);
+      if (isNaN(val)) val = parseInt(s.min);
+      val = clamp(val, parseInt(s.min), parseInt(s.max));
+      n.value = val;
+      s.value = val;
+      calculate();
+    });
+  });
+
+  calculate();
+</script>
+
+</body>
+</html>

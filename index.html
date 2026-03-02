@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Project Velocity Calculator</title>
+<title>Project Velocity & ROI Calculator</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -16,6 +16,7 @@
     --accent: #3b82f6;
     --accent-glow: rgba(59, 130, 246, 0.15);
     --green: #10b981;
+    --green-glow: rgba(16, 185, 129, 0.15);
     --amber: #f59e0b;
     --red: #ef4444;
   }
@@ -33,584 +34,353 @@
       radial-gradient(ellipse at 85% 20%, rgba(16, 185, 129, 0.03) 0%, transparent 50%);
   }
 
-  .page-header {
-    max-width: 1280px;
-    margin: 0 auto 2rem;
-  }
-
+  .page-header { max-width: 1280px; margin: 0 auto 2rem; }
+  
   .page-header .tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--accent);
-    background: var(--accent-glow);
-    padding: 0.35rem 0.75rem;
-    border-radius: 4px;
-    display: inline-block;
-    margin-bottom: 0.75rem;
-    border: 1px solid rgba(59, 130, 246, 0.2);
+    font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--accent); background: var(--accent-glow);
+    padding: 0.35rem 0.75rem; border-radius: 4px; display: inline-block;
+    margin-bottom: 0.75rem; border: 1px solid rgba(59, 130, 246, 0.2);
   }
 
-  .page-header h1 {
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.3rem;
-  }
+  .page-header h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+  .page-header p { color: var(--text-dim); font-size: 0.88rem; line-height: 1.5; }
 
-  .page-header p {
-    color: var(--text-dim);
-    font-size: 0.88rem;
-    line-height: 1.5;
-  }
-
-  /* --- Two-column layout --- */
   .layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    max-width: 1280px;
-    margin: 0 auto;
-    align-items: start;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+    max-width: 1280px; margin: 0 auto; align-items: start;
   }
 
-  .left-col {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
+  .left-col { display: flex; flex-direction: column; gap: 1.5rem; }
 
   .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.75rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.75rem;
   }
 
   .card-title {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    margin-bottom: 1.25rem;
-    padding-bottom: 0.65rem;
-    border-bottom: 1px solid var(--border);
+    font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-dim); margin-bottom: 1.25rem;
+    padding-bottom: 0.65rem; border-bottom: 1px solid var(--border);
   }
 
-  /* --- Inputs --- */
-  .input-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .input-group label {
-    display: block;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--text-dim);
-    margin-bottom: 0.55rem;
-  }
-
-  .slider-row {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-  }
+  .input-stack { display: flex; flex-direction: column; gap: 1.5rem; }
+  .input-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-dim); margin-bottom: 0.55rem; }
+  .slider-row { display: flex; align-items: center; gap: 0.85rem; }
 
   input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
-    flex: 1;
-    height: 7px;
-    border-radius: 4px;
-    background: var(--surface2);
-    outline: none;
-    cursor: pointer;
+    -webkit-appearance: none; appearance: none; flex: 1; height: 7px;
+    border-radius: 4px; background: var(--surface2); outline: none; cursor: pointer;
   }
-
   input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--accent);
-    cursor: pointer;
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+    -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
+    background: var(--accent); cursor: pointer; box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
     transition: transform 0.15s ease;
   }
-
   input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.12); }
-
   input[type="range"]::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--accent);
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+    width: 20px; height: 20px; border-radius: 50%; background: var(--accent);
+    border: none; cursor: pointer; box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
   }
 
   .num-input {
-    font-family: 'DM Mono', monospace;
-    font-size: 1.05rem;
-    font-weight: 500;
-    color: var(--text);
-    width: 82px;
-    text-align: center;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 0.4rem 0.5rem;
-    outline: none;
-    transition: border-color 0.2s;
-    flex-shrink: 0;
+    font-family: 'DM Mono', monospace; font-size: 1.05rem; font-weight: 500;
+    color: var(--text); width: 82px; text-align: center; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 8px; padding: 0.4rem 0.5rem;
+    outline: none; transition: border-color 0.2s; flex-shrink: 0;
   }
-
-  .num-input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-glow);
-  }
-
-  .num-input::-webkit-outer-spin-button,
-  .num-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .num-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+  .num-input::-webkit-outer-spin-button, .num-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
   .num-input { -moz-appearance: textfield; }
 
   .range-labels {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 0.25rem;
-    padding-right: calc(82px + 0.85rem);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--text-dim);
-    opacity: 0.45;
+    display: flex; justify-content: space-between; margin-top: 0.25rem;
+    padding-right: calc(82px + 0.85rem); font-family: 'DM Mono', monospace;
+    font-size: 0.6rem; color: var(--text-dim); opacity: 0.45;
   }
 
-  /* --- Complexity --- */
-  .complexity-options {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 0.65rem;
+  .settings-row {
+    display: flex; gap: 1rem; margin-top: 0.65rem; padding-top: 0.65rem;
+    border-top: 1px dashed var(--border);
   }
-
-  .complexity-btn {
-    position: relative;
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--text-dim);
-    background: var(--surface2);
-    border: 2px solid var(--border);
-    border-radius: 10px;
-    padding: 0.85rem 0.5rem;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s ease;
+  .setting-item { display: flex; align-items: center; gap: 0.4rem; }
+  .setting-item label { margin: 0; font-size: 0.7rem; color: var(--text-dim); font-weight: 400; }
+  .mini-input {
+    font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--text);
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 4px;
+    padding: 0.2rem 0.4rem; width: 60px; outline: none; text-align: center;
   }
+  .mini-input:focus { border-color: var(--accent); }
 
-  .complexity-btn:hover {
-    border-color: rgba(59, 130, 246, 0.3);
-    color: var(--text);
-  }
-
-  .complexity-btn.active {
-    border-color: var(--accent);
-    color: var(--text);
-    background: rgba(59, 130, 246, 0.08);
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
-  }
-
-  .complexity-btn .multiplier {
-    display: block;
-    font-family: 'DM Mono', monospace;
-    font-size: 1.2rem;
-    font-weight: 500;
-    margin-bottom: 0.2rem;
-    color: var(--accent);
-    opacity: 0.5;
-    transition: opacity 0.2s;
-  }
-
-  .complexity-btn.active .multiplier { opacity: 1; }
-
-  .complexity-btn .clabel { display: block; font-size: 0.75rem; }
-
-  .active-dot {
-    position: absolute;
-    top: 7px; right: 7px;
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--accent);
-    display: none;
-    animation: pulse 2s ease infinite;
-  }
-
-  .complexity-btn.active .active-dot { display: block; }
-
-  /* --- Output Card (right side) --- */
   .output-card {
     background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.75rem;
-    position: relative;
-    overflow: hidden;
-    position: sticky;
-    top: 2rem;
+    border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem;
+    position: sticky; top: 2rem; overflow: hidden;
   }
-
   .output-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--accent), var(--green));
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--green), var(--accent));
   }
 
   .hero-output {
-    text-align: center;
-    margin-bottom: 1.75rem;
-    padding: 1.5rem 1rem;
-    background: rgba(59, 130, 246, 0.06);
-    border: 1px solid rgba(59, 130, 246, 0.15);
+    text-align: center; margin-bottom: 1.5rem; padding: 1.5rem 1rem;
+    background: var(--green-glow); border: 1px solid rgba(16, 185, 129, 0.2);
     border-radius: 10px;
   }
-
   .hero-output .value {
-    font-family: 'DM Mono', monospace;
-    font-size: 3.5rem;
-    font-weight: 500;
-    color: var(--accent);
-    line-height: 1;
-    margin-bottom: 0.45rem;
+    font-family: 'DM Mono', monospace; font-size: 3.5rem; font-weight: 500;
+    color: var(--green); line-height: 1; margin-bottom: 0.45rem;
   }
+  .hero-output .label { font-size: 0.82rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; }
 
-  .hero-output .label {
-    font-size: 0.82rem;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+  .compare-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;
   }
-
-  .output-trio {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+  .compare-box {
+    background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem; text-align: center;
   }
-
-  .output-item { text-align: center; }
-
-  .output-item .value {
-    font-family: 'DM Mono', monospace;
-    font-size: 1.5rem;
-    font-weight: 500;
-    line-height: 1;
-    margin-bottom: 0.35rem;
-  }
-
-  .output-item .label {
-    font-size: 0.65rem;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    line-height: 1.35;
-  }
-
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin-bottom: 1.5rem;
-  }
+  .compare-box .c-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); margin-bottom: 0.5rem; }
+  .compare-box .c-value { font-family: 'DM Mono', monospace; font-size: 1.5rem; font-weight: 500; }
+  
+  .divider { height: 1px; background: var(--border); margin-bottom: 1.5rem; }
 
   .summary-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.6rem 0.85rem;
-    background: var(--surface);
-    border-radius: 8px;
-    margin-bottom: 0.6rem;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.6rem 0.85rem; background: var(--surface); border-radius: 8px; margin-bottom: 0.6rem;
   }
-
-  .summary-row:last-child { margin-bottom: 0; }
-
-  .summary-label {
-    font-size: 0.78rem;
-    color: var(--text-dim);
-  }
-
-  .summary-value {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.82rem;
-    font-weight: 500;
-  }
-
-  .status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    padding: 0.25rem 0.6rem;
-    border-radius: 4px;
-    font-weight: 500;
-  }
-
-  .status-badge.green {
-    background: rgba(16, 185, 129, 0.1);
-    color: var(--green);
-    border: 1px solid rgba(16, 185, 129, 0.2);
-  }
-
-  .status-badge.amber {
-    background: rgba(245, 158, 11, 0.1);
-    color: var(--amber);
-    border: 1px solid rgba(245, 158, 11, 0.2);
-  }
-
-  .status-badge.red {
-    background: rgba(239, 68, 68, 0.1);
-    color: var(--red);
-    border: 1px solid rgba(239, 68, 68, 0.2);
-  }
-
-  .status-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: currentColor;
-    animation: pulse 2s ease infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
+  .summary-label { font-size: 0.78rem; color: var(--text-dim); }
+  .summary-value { font-family: 'DM Mono', monospace; font-size: 0.82rem; font-weight: 500; }
 
   .formula-bar {
-    margin-top: 1.25rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--text-dim);
-    text-align: center;
-    padding: 0.65rem;
-    background: var(--surface);
-    border-radius: 6px;
-    border: 1px dashed var(--border);
-    line-height: 1.7;
+    margin-top: 1.25rem; font-family: 'DM Mono', monospace; font-size: 0.65rem;
+    color: var(--text-dim); text-align: center; padding: 0.65rem; background: var(--surface);
+    border-radius: 6px; border: 1px dashed var(--border); line-height: 1.7;
   }
 
-  /* Responsive: stack on narrow screens */
-  @media (max-width: 860px) {
-    .layout {
-      grid-template-columns: 1fr;
-    }
-    .output-card { position: static; }
-    body { padding: 1.25rem; }
-  }
-
-  @media (max-width: 480px) {
-    .output-trio { grid-template-columns: 1fr; gap: 0.75rem; }
-    .complexity-options { grid-template-columns: 1fr; }
-    .hero-output .value { font-size: 2.5rem; }
-  }
+  @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } .output-card { position: static; } body { padding: 1.25rem; } }
+  @media (max-width: 480px) { .hero-output .value { font-size: 2.5rem; } .settings-row { flex-direction: column; gap: 0.5rem; } }
 </style>
 </head>
 <body>
 
 <div class="page-header">
-  <div class="tag">Planning Tool</div>
+  <div class="tag">Planning & ROI Tool</div>
   <h1>Project Velocity Calculator</h1>
-  <p>Adjust the levers to estimate total effort and how many resources are needed to deliver within the timeline.</p>
-  <div style="margin-top: 1rem; padding: 0.75rem 1rem; background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.15); border-radius: 8px; display: flex; align-items: flex-start; gap: 0.6rem;">
-    <span style="font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); flex-shrink: 0; padding-top: 1px;">Assumptions</span>
-    <span style="font-size: 0.82rem; color: var(--text-dim); line-height: 1.5;">This is just a conversion calculation for Development, this does not include non-automated Validation and UAT sessions.</span>
-  </div>
+  <p>Compare baseline manual effort vs. concurrent execution to estimate total time saved.</p>
 </div>
 
 <div class="layout">
-
-  <!-- LEFT: Inputs + Complexity -->
   <div class="left-col">
+    
     <div class="card">
-      <div class="card-title">Input Parameters</div>
+      <div class="card-title">1. Resource Allocation</div>
       <div class="input-stack">
         <div class="input-group">
-          <label>Number of Sessions</label>
+          <label>Number of Resources (People at 40 hrs/wk)</label>
           <div class="slider-row">
-            <input type="range" id="sessions" min="1" max="30000" value="20000" step="1">
-            <input type="number" class="num-input" id="sessionsNum" value="20000" min="1" max="30000">
+            <input type="range" id="resources" min="1" max="100" value="10" step="1">
+            <input type="number" class="num-input" id="resourcesNum" value="10" min="1" max="100">
           </div>
-          <div class="range-labels"><span>1</span><span>30,000</span></div>
-        </div>
-        <div class="input-group">
-          <label>Days per Session</label>
-          <div class="slider-row">
-            <input type="range" id="daysPerSession" min="1" max="30" value="2">
-            <input type="number" class="num-input" id="daysPerSessionNum" value="2" min="1" max="30">
-          </div>
-          <div class="range-labels"><span>1</span><span>30</span></div>
-        </div>
-        <div class="input-group">
-          <label>Duration (Months)</label>
-          <div class="slider-row">
-            <input type="range" id="months" min="6" max="24" value="12">
-            <input type="number" class="num-input" id="monthsNum" value="12" min="6" max="24">
-          </div>
-          <div class="range-labels"><span>6</span><span>24</span></div>
+          <div class="range-labels"><span>1</span><span>100</span></div>
         </div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">Complexity Multiplier</div>
-      <div class="complexity-options">
-        <button class="complexity-btn active" data-mult="1.25" onclick="setComplexity(this)">
-          <span class="active-dot"></span>
-          <span class="multiplier">1.25×</span>
-          <span class="clabel">Simple</span>
-        </button>
-        <button class="complexity-btn" data-mult="2" onclick="setComplexity(this)">
-          <span class="active-dot"></span>
-          <span class="multiplier">2×</span>
-          <span class="clabel">Medium</span>
-        </button>
-        <button class="complexity-btn" data-mult="3" onclick="setComplexity(this)">
-          <span class="active-dot"></span>
-          <span class="multiplier">3×</span>
-          <span class="clabel">Complex</span>
-        </button>
+      <div class="card-title">2. Task Configurations</div>
+      <div class="input-stack">
+        
+        <div class="input-group">
+          <label>Simple Sessions</label>
+          <div class="slider-row">
+            <input type="range" id="simple" min="1" max="10000" value="2000" step="1">
+            <input type="number" class="num-input" id="simpleNum" value="2000" min="1" max="10000">
+          </div>
+          <div class="range-labels"><span>1</span><span>10,000</span></div>
+          <div class="settings-row">
+            <div class="setting-item">
+              <label>Base (Hrs):</label>
+              <input type="number" class="mini-input cfg-input" id="baseSimpleHrs" value="4">
+            </div>
+            <div class="setting-item">
+              <label>New (Mins):</label>
+              <input type="number" class="mini-input cfg-input" id="simpleMins" value="15">
+            </div>
+            <div class="setting-item">
+              <label>Concurrent:</label>
+              <input type="number" class="mini-input cfg-input" id="simpleConc" value="1000">
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Iteration Sessions</label>
+          <div class="slider-row">
+            <input type="range" id="iter" min="1" max="10000" value="1000" step="1">
+            <input type="number" class="num-input" id="iterNum" value="1000" min="1" max="10000">
+          </div>
+          <div class="range-labels"><span>1</span><span>10,000</span></div>
+          
+          <div class="slider-row" style="margin-top: 1rem;">
+            <input type="range" id="iterAmount" min="10" max="200" value="50" step="1">
+            <input type="number" class="num-input" id="iterAmountNum" value="50" min="10" max="200">
+          </div>
+          <div class="range-labels" style="margin-bottom: 0.25rem;"><span>10 iterations</span><span>200 iterations</span></div>
+
+          <div class="settings-row">
+            <div class="setting-item">
+              <label>Base (Hrs):</label>
+              <input type="number" class="mini-input cfg-input" id="baseIterHrs" value="40">
+            </div>
+            <div class="setting-item">
+              <label>New (Mins/Iter):</label>
+              <input type="number" class="mini-input cfg-input" id="iterMins" value="30">
+            </div>
+            <div class="setting-item">
+              <label>Concurrent:</label>
+              <input type="number" class="mini-input cfg-input" id="iterConc" value="1000">
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Refactors</label>
+          <div class="slider-row">
+            <input type="range" id="refactor" min="1" max="10000" value="5" step="1">
+            <input type="number" class="num-input" id="refactorNum" value="5" min="1" max="10000">
+          </div>
+          <div class="range-labels"><span>1</span><span>10,000</span></div>
+          <div class="settings-row">
+            <div class="setting-item">
+              <label>Base (Hrs):</label>
+              <input type="number" class="mini-input cfg-input" id="baseRefacHrs" value="120">
+            </div>
+            <div class="setting-item">
+              <label>New (Hrs):</label>
+              <input type="number" class="mini-input cfg-input" id="refactorHrs" value="80">
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 
-  <!-- RIGHT: Output -->
   <div class="output-card">
-    <div class="card-title">Velocity Output</div>
+    <div class="card-title">Velocity & ROI Output</div>
 
     <div class="hero-output">
-      <div class="value" id="resourcesNeeded">—</div>
-      <div class="label">Resources Needed</div>
+      <div class="value" id="weeksSaved">—</div>
+      <div class="label">Total Time Saved (Weeks)</div>
     </div>
 
-    <div class="output-trio">
-      <div class="output-item">
-        <div class="value" id="baseEffort" style="color: var(--text-dim);">—</div>
-        <div class="label">Base Effort<br>(Days)</div>
+    <div class="compare-grid">
+      <div class="compare-box">
+        <div class="c-label">Baseline Timeline</div>
+        <div class="c-value" id="baseWeeks" style="color: var(--text-dim);">—</div>
       </div>
-      <div class="output-item">
-        <div class="value" id="totalEffort" style="color: var(--accent);">—</div>
-        <div class="label">Adjusted Effort<br>(Days)</div>
-      </div>
-      <div class="output-item">
-        <div class="value" id="availableDays" style="color: var(--green);">—</div>
-        <div class="label">Working Days<br>/ Person</div>
+      <div class="compare-box">
+        <div class="c-label">New Timeline</div>
+        <div class="c-value" id="newWeeks" style="color: var(--accent);">—</div>
       </div>
     </div>
 
     <div class="divider"></div>
 
     <div class="summary-row">
-      <span class="summary-label">Base Effort</span>
-      <span class="summary-value" id="baseSummary">—</span>
+      <span class="summary-label">Baseline Human Hours (Manual)</span>
+      <span class="summary-value" id="sumBaseHrs" style="color: var(--text-dim);">—</span>
     </div>
     <div class="summary-row">
-      <span class="summary-label">Complexity Adjusted</span>
-      <span class="summary-value" id="adjSummary">—</span>
+      <span class="summary-label">New Human Hours (Refactoring)</span>
+      <span class="summary-value" id="sumNewHumanHrs">—</span>
     </div>
     <div class="summary-row">
-      <span class="summary-label">Available Days / Person</span>
-      <span class="summary-value" id="capacitySummary">—</span>
+      <span class="summary-label">New Machine Hours (Concurrent)</span>
+      <span class="summary-value" id="sumNewMachineHrs">—</span>
     </div>
-    <div class="summary-row">
-      <span class="summary-label">Utilization per Resource</span>
-      <span class="summary-value" id="utilSummary">—</span>
-    </div>
-    <div class="summary-row">
-      <span class="summary-label">Team Feasibility</span>
-      <span class="summary-value">
-        <span class="status-badge green" id="statusBadge">
-          <span class="status-dot"></span>
-          Comfortable
-        </span>
-      </span>
+    <div class="summary-row" style="margin-top: 1rem; border-top: 1px solid var(--border); border-radius: 0; padding-top: 1rem; background: transparent;">
+      <span class="summary-label" style="font-weight: 600; color: var(--text);">Team Capacity (Hrs/Week)</span>
+      <span class="summary-value" id="teamCapacity" style="color: var(--accent);">—</span>
     </div>
 
-    <div class="formula-bar" id="formulaBar">
-      resources = ⌈ (sessions × days/session × complexity) ÷ (months × 21.67) ⌉
+    <div class="formula-bar">
+      weeks saved = baseline weeks - [ (new human hrs ÷ team capacity) + (machine hrs ÷ 40) ]
     </div>
   </div>
-
-</div>
-
-<div style="max-width: 1280px; margin: 2rem auto 0; padding: 1.25rem 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; text-align: center;">
-  <p style="font-weight: 700; font-size: 0.88rem; color: var(--text); line-height: 1.6; margin: 0;">This is an estimate based on what we know, it does not include details subject to COAA or deeper analysis of the environment.</p>
 </div>
 
 <script>
-  const WD = 21.67;
-  let mult = 1.25;
-
   const pairs = [
-    { slider: 'sessions', num: 'sessionsNum' },
-    { slider: 'daysPerSession', num: 'daysPerSessionNum' },
-    { slider: 'months', num: 'monthsNum' },
+    { slider: 'resources', num: 'resourcesNum' },
+    { slider: 'simple', num: 'simpleNum' },
+    { slider: 'iter', num: 'iterNum' },
+    { slider: 'iterAmount', num: 'iterAmountNum' },
+    { slider: 'refactor', num: 'refactorNum' },
   ];
 
-  const fmt = n => n.toLocaleString();
+  const fmt = n => n.toLocaleString(undefined, { maximumFractionDigits: 1 });
   const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
-  function setComplexity(btn) {
-    document.querySelectorAll('.complexity-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    mult = parseFloat(btn.dataset.mult);
-    calculate();
-  }
-
   function calculate() {
-    const s = parseInt(document.getElementById('sessions').value);
-    const d = parseInt(document.getElementById('daysPerSession').value);
-    const m = parseInt(document.getElementById('months').value);
+    // Inputs (Counts & Levers)
+    const res = parseInt(document.getElementById('resources').value) || 1;
+    const simple = parseInt(document.getElementById('simple').value) || 0;
+    const iter = parseInt(document.getElementById('iter').value) || 0;
+    const iterAmt = parseInt(document.getElementById('iterAmount').value) || 0;
+    const refac = parseInt(document.getElementById('refactor').value) || 0;
 
-    const base = s * d;
-    const adj = Math.ceil(base * mult);
-    const avail = Math.round(m * WD);
-    const res = Math.ceil(adj / avail);
-    const util = Math.round((adj / (res * avail)) * 100);
+    // Configs (Base)
+    const bSimpleHrs = parseFloat(document.getElementById('baseSimpleHrs').value) || 0;
+    const bIterHrs = parseFloat(document.getElementById('baseIterHrs').value) || 0;
+    const bRefacHrs = parseFloat(document.getElementById('baseRefacHrs').value) || 0;
 
-    document.getElementById('resourcesNeeded').textContent = fmt(res);
-    document.getElementById('baseEffort').textContent = fmt(base);
-    document.getElementById('totalEffort').textContent = fmt(adj);
-    document.getElementById('availableDays').textContent = fmt(avail);
+    // Configs (New)
+    const simpleMins = parseFloat(document.getElementById('simpleMins').value) || 0;
+    const simpleConc = parseInt(document.getElementById('simpleConc').value) || 1;
+    const iterMins = parseFloat(document.getElementById('iterMins').value) || 0;
+    const iterConc = parseInt(document.getElementById('iterConc').value) || 1;
+    const refacHrs = parseFloat(document.getElementById('refactorHrs').value) || 0;
 
-    document.getElementById('baseSummary').textContent = `${fmt(s)} × ${d} d = ${fmt(base)} days`;
-    document.getElementById('adjSummary').textContent = `${fmt(base)} × ${mult}× = ${fmt(adj)} days`;
-    document.getElementById('capacitySummary').textContent = `${m} mo × 21.67 = ${fmt(avail)} days`;
-    document.getElementById('utilSummary').textContent = util + '%';
+    // 1. Baseline Calculations
+    const teamWeeklyHrs = res * 40;
+    const totalBaseHrs = (simple * bSimpleHrs) + (iter * bIterHrs) + (refac * bRefacHrs);
+    const baseWeeks = totalBaseHrs / teamWeeklyHrs;
 
-    const badge = document.getElementById('statusBadge');
-    if (util <= 75) {
-      badge.className = 'status-badge green';
-      badge.innerHTML = '<span class="status-dot"></span>Comfortable';
-    } else if (util <= 90) {
-      badge.className = 'status-badge amber';
-      badge.innerHTML = '<span class="status-dot"></span>Tight';
-    } else {
-      badge.className = 'status-badge red';
-      badge.innerHTML = '<span class="status-dot"></span>At Capacity';
-    }
+    // 2. New State Calculations
+    // Machine Hours: runs = ceil(total / concurrent). time = runs * (mins/60)
+    const simpleRuns = Math.ceil(simple / simpleConc);
+    const simpleTotalHrs = simpleRuns * (simpleMins / 60);
 
-    const u = document.getElementById('utilSummary');
-    u.style.color = util <= 75 ? 'var(--green)' : util <= 90 ? 'var(--amber)' : 'var(--red)';
+    const iterRuns = Math.ceil(iter / iterConc);
+    const iterTotalHrs = iterRuns * iterAmt * (iterMins / 60);
 
-    document.getElementById('formulaBar').textContent =
-      `resources = ⌈ (${fmt(s)} × ${d} × ${mult}) ÷ ${fmt(avail)} ⌉ = ${fmt(res)} people`;
+    const machineTotalHrs = simpleTotalHrs + iterTotalHrs;
+
+    // Human Hours (Refactoring)
+    const newHumanHrs = refac * refacHrs;
+    
+    // Overall Weeks
+    const humanWeeks = newHumanHrs / teamWeeklyHrs;
+    const machineWeeks = machineTotalHrs / 40; // Standardizing machine time against a 40 hr week for pipeline logic
+    const newWeeks = humanWeeks + machineWeeks;
+
+    // 3. ROI / Time Saved
+    const weeksSaved = Math.max(0, baseWeeks - newWeeks);
+
+    // Update DOM
+    document.getElementById('weeksSaved').textContent = fmt(weeksSaved);
+    document.getElementById('baseWeeks').textContent = fmt(baseWeeks) + ' wks';
+    document.getElementById('newWeeks').textContent = fmt(newWeeks) + ' wks';
+
+    document.getElementById('sumBaseHrs').textContent = fmt(totalBaseHrs) + ' hrs';
+    document.getElementById('sumNewHumanHrs').textContent = fmt(newHumanHrs) + ' hrs';
+    document.getElementById('sumNewMachineHrs').textContent = fmt(machineTotalHrs) + ' hrs';
+    document.getElementById('teamCapacity').textContent = fmt(teamWeeklyHrs) + ' hrs';
   }
 
+  // Link Sliders to Number inputs
   pairs.forEach(({ slider, num }) => {
     const s = document.getElementById(slider);
     const n = document.getElementById(num);
@@ -623,6 +393,11 @@
       let v = parseInt(n.value); if (isNaN(v)) v = +s.min;
       v = clamp(v, +s.min, +s.max); n.value = v; s.value = v; calculate();
     });
+  });
+
+  // Re-calc when config boxes change
+  document.querySelectorAll('.cfg-input').forEach(input => {
+    input.addEventListener('input', calculate);
   });
 
   calculate();

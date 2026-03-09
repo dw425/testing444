@@ -306,7 +306,7 @@
     </div>
 
     <div class="formula-bar">
-      weeks saved = baseline weeks - [ (new human hrs ÷ team capacity) + (machine hrs ÷ 40) ]
+      weeks saved = baseline weeks - [ (new human hrs + machine hrs) ÷ team capacity ]
     </div>
   </div>
 </div>
@@ -363,7 +363,7 @@
     
     // Overall Weeks
     const humanWeeks = newHumanHrs / teamWeeklyHrs;
-    const machineWeeks = machineTotalHrs / 40; // Standardizing machine time against a 40 hr week for pipeline logic
+    const machineWeeks = machineTotalHrs / teamWeeklyHrs; 
     const newWeeks = humanWeeks + machineWeeks;
 
     // 3. ROI / Time Saved
